@@ -21,6 +21,7 @@ bool canMove;
 int map[MAX_L + 5][MAX_L + 5];
 bool isTrap[MAX_L + 5][MAX_L + 5];
 bool isWall[MAX_L + 5][MAX_L + 5];
+bool visited[MAX_N + 5];
 vector <int> v;
 
 const int dy[4] = {-1, 0, 1, 0};
@@ -35,6 +36,10 @@ bool isOutside(int y, int x) {
 
 void push(int n) {
     
+    if (visited[n])
+        return;
+    
+    visited[n] = true;
     v.push_back(n);
     int y = knightPool[n].y;
     int x = knightPool[n].x;
@@ -121,6 +126,7 @@ void battle() {
     
     v.clear();
     canMove = true;
+    memset(visited, false, sizeof(visited));
     push(num);
     
     if (!canMove)
