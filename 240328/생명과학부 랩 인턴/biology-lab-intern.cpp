@@ -41,18 +41,18 @@ void bacteria_move() {
                 int ny = i + dy[d] * s;
                 int nx = j + dx[d] * s;
                 
-                if (ny < 1 || ny > n || nx < 1 || n > m) {
+                if (ny < 1 || ny > n || nx < 1 || nx > m) {
                     
                     int sy = (n - 1) * 2;
                     int sx = (m - 1) * 2;
                     
                     if (ny > n) {
-                        int index = (ny - 1) % sy;
-                        if (index < n) 
+                        int index = (ny - 2) % sy;
+                        if (index < n - 1) 
                             tmp[index + 2][j].push_back(bn);
                         else {
                             bpool[bn].d = 1;
-                            int gap = index - (n - 1);
+                            int gap = index - (n - 2);
                             tmp[n - gap][j].push_back(bn);
                         }
                     }
@@ -60,22 +60,22 @@ void bacteria_move() {
                     else if (ny < 1) {
                         ny *= -1;
                         int index = ny % sy;
-                        if (index < n) { 
+                        if (index < n - 1) { 
                             tmp[index + 2][j].push_back(bn);
                             bpool[bn].d = 2;
                         }
                         else {
-                            int gap = index - (n - 1);
+                            int gap = index - (n - 2);
                             tmp[n - gap][j].push_back(bn);
                         }
                     }
                     
                     else if (nx > m) {
-                        int index = (nx - 1) % sx;
+                        int index = (nx - 2) % sx;
                         if (index < m)  
                             tmp[i][index + 2].push_back(bn);
                         else {
-                            int gap = index - (m - 1);
+                            int gap = index - (m - 2);
                             tmp[i][m - gap].push_back(bn);
                         }
                     }
@@ -83,13 +83,13 @@ void bacteria_move() {
                     else {
                         nx *= -1;
                         int index = nx % sx;
-                        if (index < m) { 
+                        if (index < m - 1) { 
                             tmp[i][index + 2].push_back(bn);
                             bpool[bn].d = 3;
                         }
                         else {
-                            int gap = index - (n - 1);
-                            tmp[n - gap][j].push_back(bn);
+                            int gap = index - (n - 2);
+                            tmp[i][m - gap].push_back(bn);
                         }
                     }
                 }
