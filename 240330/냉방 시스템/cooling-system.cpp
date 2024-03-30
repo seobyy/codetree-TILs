@@ -38,6 +38,7 @@ void input() {
                 air_con[i][j] = x - 1;
         }
     }
+    
     for (int i = 0; i < m; ++i) {
         int y, x, s;
         cin >> y >> x >> s;
@@ -46,7 +47,7 @@ void input() {
         else
             wall2[y - 1][x - 1] = true;
     }
-
+     
 }
 
 bool is_in_map(int y, int x) {
@@ -90,8 +91,8 @@ void air_con_move() {
                     for (int k = 0; k < 3; ++k) {
                         if (!k) {
                             if (dir == 1) {
-                                if (!wall1[y][x] && !wall2[y - 1][x]) {
-                                    int ny = y - 1; int nx = x - 1;
+                                if (!wall1[y + 1][x] && !wall2[y + 1][x]) {
+                                    int ny = y + 1; int nx = x - 1;
                                     if (is_in_map(ny, nx))
                                         q.push({p - 1, ny, nx});
                                 }
@@ -152,8 +153,8 @@ void air_con_move() {
                         
                         else {
                             if (dir == 1) {
-                                if (!wall2[y + 1][x] && wall1[y + 1][x]) {
-                                    int ny = y + 1; int nx = x - 1;
+                                if (!wall1[y][x] && wall2[y - 1][x]) {
+                                    int ny = y - 1; int nx = x - 1;
                                     if (is_in_map(ny, nx))
                                         q.push({p - 1, ny, nx});
                                 }
@@ -173,8 +174,8 @@ void air_con_move() {
                                 }
                             }
                             else {
-                                if (!wall2[y][x + 1] && !wall1[y + 1][x + 1]) {
-                                    int ny = y + 1; int nx = x + 1;
+                                if (!wall2[y][x] && !wall1[y + 1][x - 1]) {
+                                    int ny = y + 1; int nx = x - 1;
                                     if (is_in_map(ny, nx))
                                         q.push({p - 1, ny, nx});
                                 }
@@ -199,6 +200,10 @@ void air_mixed() {
     // 1. 가로비교
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n - 1; ++j) {
+            
+            if (wall2[i][j + 1])
+                continue;
+            
             int gap = abs(Map[i][j] - Map[i][j + 1]) / 4;
             if (Map[i][j] >= Map[i][j + 1]) {
                 tmp[i][j] -= gap;
@@ -214,6 +219,10 @@ void air_mixed() {
     // 2. 세로비교
     for (int j = 0; j < n; ++j) {
         for (int i = 0; i < n - 1; ++i) {
+            
+            if (wall1[i + 1][j])
+                continue;
+            
             int gap = abs(Map[i][j] - Map[i + 1][j]) / 4;
             if (Map[i][j] >= Map[i + 1][j]) {
                 tmp[i][j] -= gap;
