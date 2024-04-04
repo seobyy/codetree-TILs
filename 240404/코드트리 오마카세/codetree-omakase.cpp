@@ -27,15 +27,13 @@ void belt_move() {
         for (auto j : v[i]) {
             int n = S[i].to_eat;
             j += time_gap;
-            if (n && j >= S[i].pos) {
+            if (n && j >= S[i].pos) 
                 S[i].to_eat--;
-                continue;
-            }
+            
             else {
                 if (j >= L) tmp2.push_back(j % L);
                 else tmp1.push_back(j);
             }
-            
             
         }
         v[i].clear();
@@ -73,11 +71,13 @@ int main() {
             
             belt_move();
             
-            //print_progress();
             if (!name_index[name]) name_index[name] = ++name_cnt;
             
             int n = name_index[name];
             v[n].push_back(x);
+            sort(v[n].begin(), v[n].end());
+            
+            //print_progress();
         }
         
         else if (cmd == 200) {
@@ -87,13 +87,15 @@ int main() {
             
             belt_move();
             
-            //print_progress();
             
             if (!name_index[name]) name_index[name] = ++name_cnt;
             
             int ni = name_index[name];
             S[ni] = { x, n };
             
+            
+            
+            //print_progress();
         }
         
         else {
