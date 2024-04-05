@@ -33,6 +33,7 @@ const int dx[4] = {0, -1, 1, 0};
 int n, m;
 int turn;
 int ans;
+
 int Map[20][20];
 bool blocked[20][20];
 bool visited[20][20];
@@ -63,6 +64,7 @@ int bfs(int y, int x, int target) {
     int res = 0;
     
     memset(visited, false, sizeof(visited));
+    visited[y][x] = true;
     queue <POS> q;
     q.push({0, y, x});
     
@@ -127,8 +129,10 @@ void people_move() {
         M[i].y = ny; M[i].x = nx;
         if (Map[ny][nx])
             v.push_back({0, ny, nx});
-        else if (ny == P[i].y && nx == P[i].x)
+        else if (ny == P[i].y && nx == P[i].x) {
             finished[i] = true;
+            v.push_back({0, ny, nx});
+        }
     }
     
     // 2. 갈수 없는 곳 체크 
@@ -140,7 +144,11 @@ void people_move() {
 
 void basecamp_move() {
     
+    if (turn > m)
+        return;
+    
     memset(visited, false, sizeof(visited));
+    visited[P[turn].y][P[turn].x] = true;
     priority_queue <POS, vector<POS>, cmp> pq;
     pq.push({0, P[turn].y, P[turn].x});
     
