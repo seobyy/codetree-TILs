@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #define fastio ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL)
 #define MAX_M 30
+#define INF 2'147'000'000
 using namespace std;
 
 struct POS { int dis; int y, x; };
@@ -61,7 +62,7 @@ void input() {
 
 int bfs(int y, int x, int target) {
     
-    int res = 0;
+    int res = INF;
     
     memset(visited, false, sizeof(visited));
     visited[y][x] = true;
