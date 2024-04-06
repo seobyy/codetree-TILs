@@ -49,7 +49,7 @@ void dough_roll() {
         tmp[height - 1][j] = arr[j];
     
     //print_tmp();
-    while (height < len - width) {
+    while (height <= len - width) {
         
         int tmp2[105][105];
         memset(tmp2, 0, sizeof(tmp2));
