@@ -102,17 +102,20 @@ void col_sort() {
 void solve() {
     int turn = 0;
     //print_progress();
-    while (++turn <= 100) {
+    while (turn <= 100) {
+        if (A[r][c] == k) {
+            ans = turn;
+            return;
+        }
+        turn++;
+        
         if (row_size >= col_size) 
             row_sort();
         else 
             col_sort();
         
         //print_progress();        
-        if (A[r][c] == k) {
-            ans = turn;
-            return;
-        }
+        
     }
     ans = -1;
 }
