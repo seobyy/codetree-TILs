@@ -25,7 +25,7 @@ void solve() {
         
         if (C[i] <= 0) continue;
         
-        if (!C[i] % M) ans += C[i] / M;
+        if (!(C[i] % M)) ans += C[i] / M;
         else ans += (C[i] / M + 1);
     }
 }
