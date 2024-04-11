@@ -69,13 +69,12 @@ void print_progress() {
 
 void init() {
     memset(is_related, false, sizeof(is_related));
-    attack_power = N + M;
 }
 
 void input() {
     cin >> N >> M >> K;
     for (int i = 1; i <= N; ++i) {
-        for (int j = 1; j <= N; ++j) {
+        for (int j = 1; j <= M; ++j) {
             cin >> Map[i][j];
             if (!Map[i][j]) is_destroyed[i][j] = true;
         }
@@ -125,12 +124,16 @@ bool can_laser() {
         }
         
         for (int d = 0; d < 8; d += 2) {
-            int ny = (y + dy[d] + N) % N;
-            if (!ny) ny = N;
-            int nx = (x + dx[d] + M) % M;
-            if (!nx) nx = M;
+            int ny = y + dy[d];
+            if (ny > N) ny = 1;
+            else if (ny < 1) ny = N;
+            int nx = x + dx[d];
+            if (nx > M) nx = 1;
+            else if (nx < 1) nx = M;
             
             if (visited[ny][nx])
+                continue;
+            if (is_destroyed[ny][nx])
                 continue;
                 
             if (Map[ny][nx]) {
@@ -152,10 +155,12 @@ void bomb_attack() {
     
     int y = target_y; int x = target_x;
     for (int d = 0; d < 8; ++d) {
-        int ny = (y + dy[d] + N) % N;
-        if (!ny) ny = N;
-        int nx = (x + dx[d] + M) % M;
-        if (!nx) nx = M;
+        int ny = y + dy[d];
+        if (ny > N) ny = 1;
+        else if (ny < 1) ny = N;
+        int nx = x + dx[d];
+        if (nx > M) nx = 1;
+        else if (nx < 1) nx = M;
         
         if (!is_destroyed[ny][nx] && Map[ny][nx]) {
             Map[ny][nx] -= attack_power / 2;
@@ -221,6 +226,18 @@ void top_repair() {
     }
 }
 
+bool top_check() {
+    int res = 0;
+    for (int i = 1; i <= N; ++i) {
+        for (int j = 1; j <= M; ++j) {
+            if (!is_destroyed[i][j]) res++;
+        }
+    }
+    if (res == 1) return true;
+    else return false;
+}
+
+
 void solve() {
     while (++turn <= K) {
         //cout << "turn: " << turn << '\n';
@@ -234,6 +251,9 @@ void solve() {
         //print_progress();
         
         top_destroy();
+        
+        if (top_check())
+            break;
         
         //print_progress();        
         
