@@ -74,10 +74,8 @@ void init() {
 void input() {
     cin >> N >> M >> K;
     for (int i = 1; i <= N; ++i) {
-        for (int j = 1; j <= M; ++j) {
+        for (int j = 1; j <= M; ++j) 
             cin >> Map[i][j];
-            if (!Map[i][j]) is_destroyed[i][j] = true;
-        }
     }
 }
 
@@ -124,24 +122,20 @@ bool can_laser() {
         }
         
         for (int d = 0; d < 8; d += 2) {
-            int ny = y + dy[d];
-            if (ny > N) ny = 1;
-            else if (ny < 1) ny = N;
-            int nx = x + dx[d];
-            if (nx > M) nx = 1;
-            else if (nx < 1) nx = M;
+            int ny = (y + dy[d] + N) % N;
+            if (!ny) ny = N;
+            int nx = (x + dx[d] + M) % M;
+            if (!nx) nx = M;
             
             if (visited[ny][nx])
                 continue;
-            if (is_destroyed[ny][nx])
+            if (!Map[ny][nx])
                 continue;
                 
-            if (Map[ny][nx]) {
-                visited[ny][nx] = true;
-                vector <POS> r2 = r;
-                r2.push_back({ny, nx});
-                q.push({ny, nx, r2});
-            }
+            visited[ny][nx] = true;
+            vector <POS> r2 = r;
+            r2.push_back({ny, nx});
+            q.push({ny, nx, r2});
         }
     }
 
@@ -155,17 +149,15 @@ void bomb_attack() {
     
     int y = target_y; int x = target_x;
     for (int d = 0; d < 8; ++d) {
-        int ny = y + dy[d];
-        if (ny > N) ny = 1;
-        else if (ny < 1) ny = N;
-        int nx = x + dx[d];
-        if (nx > M) nx = 1;
-        else if (nx < 1) nx = M;
+        int ny = (y + dy[d] + N) % N;
+        if (!ny) ny = N;
+        int nx = (x + dx[d] + M) % M;
+        if (!nx) nx = M;
         
         if (ny == attack_y && nx == attack_x)
             continue;
         
-        if (!is_destroyed[ny][nx] && Map[ny][nx]) {
+        if (Map[ny][nx]) {
             Map[ny][nx] -= attack_power / 2;
             is_related[ny][nx] = true;
         }
@@ -177,7 +169,7 @@ void attack() {
     priority_queue <INFO, vector<INFO>, cmp2> pq;
     for (int i = 1; i <= N; ++i) {
         for (int j = 1; j <= M; ++j) {
-            if (is_destroyed[i][j] || !Map[i][j])
+            if (!Map[i][j])
                 continue;
             if (i == attack_y && j == attack_x)
                 continue;
@@ -211,10 +203,8 @@ void attack() {
 void top_destroy() {
     for (int i = 1; i <= N; ++i) {
         for (int j = 1; j <= M; ++j) {
-            if (Map[i][j] <= 0) {
+            if (Map[i][j] <= 0) 
                 Map[i][j] = 0;
-                is_destroyed[i][j] = true;
-            }
         }
     }
 }
@@ -222,7 +212,7 @@ void top_destroy() {
 void top_repair() {
     for (int i = 1; i <= N; ++i) {
         for (int j = 1; j <= M; ++j) {
-            if (is_destroyed[i][j] || is_related[i][j])
+            if (!Map[i][j] || is_related[i][j])
                 continue;
             Map[i][j]++;
         }
@@ -233,7 +223,7 @@ bool top_check() {
     int res = 0;
     for (int i = 1; i <= N; ++i) {
         for (int j = 1; j <= M; ++j) {
-            if (!is_destroyed[i][j]) res++;
+            if (Map[i][j]) res++;
         }
     }
     if (res == 1) return true;
