@@ -5,13 +5,14 @@
 using namespace std;
 
 struct POS { int y, x; };
-struct POS2 { int elapsed_time; int y, x; };
+struct POS2 { int cnt; int elapsed_time; int y, x; };
 
 // 상 하 좌 우 
 const int dy[4] = {-1, 1, 0, 0};
 const int dx[4] = {0, 0, -1, 1};
 
 int N, M;
+int virus_cnt;
 int ans = INF;
 int Map[MAX_N + 5][MAX_N + 5];
 bool visited[MAX_N + 5][MAX_N + 5];
@@ -25,30 +26,35 @@ void input() {
         for (int j = 0; j < N; ++j) {
             cin >> Map[i][j];
             if (Map[i][j] == 2) hospital.push_back({i, j});
+            else if (!Map[i][j]) virus_cnt++;
         }
     }
 }
 
 void bfs() {
-    
+    int cnt = 0;
     memset(visited, false, sizeof(visited));
     queue <POS2> q;
     
     for (int i = 0; i < M; ++i) {
         int y = hospital[target[i]].y; int x = hospital[target[i]].x;
-        q.push({0, y, x});
+        q.push({0, 0, y, x});
         visited[y][x] = true;
     }
     
     int max_t = 0;
     
     while (!q.empty()) {
+        int c = q.front().cnt;
         int et = q.front().elapsed_time;
         int y = q.front().y;
         int x = q.front().x;
         q.pop();
         
-        max_t = max(max_t, et);
+        if (c == virus_cnt) {
+            max_t = et;
+            break;
+        }
         
         for (int i = 0; i < 4; ++i) {
             int ny = y + dy[i];
@@ -59,22 +65,15 @@ void bfs() {
             if (visited[ny][nx])
                 continue;
             
-            if (!Map[ny][nx]) {
+            if (Map[ny][nx] != 1) {
                 visited[ny][nx] = true;
-                q.push({et + 1, ny, nx});
+                if (!Map[ny][nx]) cnt++;
+                q.push({cnt, et + 1, ny, nx});
             }
         }
     }
     
-    bool can_bfs = true;
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            if (!Map[i][j] && !visited[i][j]) 
-                can_bfs = false;
-        }
-    }
-    
-    if (can_bfs) ans = min(ans, max_t);
+    if (cnt == virus_cnt) ans = min(ans, max_t);
     
 }
 
