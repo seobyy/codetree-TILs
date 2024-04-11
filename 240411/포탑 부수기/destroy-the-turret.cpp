@@ -162,6 +162,9 @@ void bomb_attack() {
         if (nx > M) nx = 1;
         else if (nx < 1) nx = M;
         
+        if (ny == attack_y && nx == attack_x)
+            continue;
+        
         if (!is_destroyed[ny][nx] && Map[ny][nx]) {
             Map[ny][nx] -= attack_power / 2;
             is_related[ny][nx] = true;
