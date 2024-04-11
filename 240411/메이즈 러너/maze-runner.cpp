@@ -77,6 +77,7 @@ void people_move() {
             int ny = y + dy[d];
             int nx = x + dx[d];
             int nd = cal_dis(ny, nx, exit_y, exit_x);
+            
             if (!is_in_map(ny, nx)) continue;
             if (Map[ny][nx]) continue;
             
@@ -120,7 +121,6 @@ void rotate(int sy, int sx, int ey, int ex) {
             for (int k = 1; k <= M; ++k) {
                 if (i == P[k].y && j == P[k].x) {
                     v.push_back({ false, sy + j - sx, ex - i + sy, k});
-                    break;
                 }
             }
             
@@ -216,11 +216,12 @@ void solve() {
     while (++turn <= K) {
         //cout << "turn: " << turn << '\n';
         people_move();
+        if (iter_check()) 
+            break;
         //print_progress();
         maze_rotate();
         //print_progress();
-        if (iter_check()) 
-            break;
+
     }
     for (int i = 1; i <= M; ++i) 
         ans += P[i].dis;
