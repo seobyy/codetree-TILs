@@ -9,7 +9,7 @@ struct INFO {
 };
 
 struct POS { int y, x; };
-struct POS2 { int y, x; vector <POS> route;};
+struct POS2 { int y, x; vector <POS> route; };
 
 struct cmp {
     bool operator()(INFO a, INFO b) {
@@ -171,6 +171,8 @@ void attack() {
         for (int j = 1; j <= M; ++j) {
             if (is_destroyed[i][j] || !Map[i][j])
                 continue;
+            if (i == attack_y && j == attack_x)
+                continue;
             pq.push({Map[i][j], recent_attack[i][j], i, j});
         }
     }
@@ -224,6 +226,9 @@ void solve() {
         //cout << "turn: " << turn << '\n';
         init();
         sel_attacker();
+        
+        //print_progress();
+        
         attack();
         
         //print_progress();
