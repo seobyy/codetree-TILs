@@ -93,7 +93,7 @@ bool can_go_pos(int y, int x) {
 
 void mark_map(int y, int x) {
     
-    if (y == 0 || y == -1) {
+    if (y == 1 || y == 0) {
         memset(spaceship, 0, sizeof(spaceship));
         memset(is_exit, false, sizeof(is_exit));
         return;
@@ -171,7 +171,7 @@ void gravity() {
 
 void robot_move() {
     
-    if (!sy || sy == -1)
+    if (sy == 1 || sy == 0)
         return;
     
     memset(visited, false, sizeof(visited));
@@ -220,7 +220,6 @@ void robot_move() {
     }
     
     ans += max_y;
-    
     
 }
 
